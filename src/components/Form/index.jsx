@@ -17,16 +17,30 @@ import department from '../../Data/department.json';
 //   return employees.push(employee);
 // }
 
-export async function getEmployeesList(employees) {
+// function getEmployeesList() {
+//     fetch('../../Data/employees.json')
+//     .then((res) => {
+//       return res.json();  
+//   })
+//   .then((employees) => {
+//       console.log(employees);
+//   })
+//   .catch(function(error) {
+//     console.log(error.message);
+//   });
+// }
+
+// getEmployeesList();
+async function getEmployeesList(employees) {
     try {
       const response = await fetch('../../Data/employees.json');
-      return response.json();
+      return response.json();   
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
       return employees;
     }
   }
-  
+    
 async function postEmployee(employee, employees) {
     try {
       const response = await fetch('../../Data/employees.json');
