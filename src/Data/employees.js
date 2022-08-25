@@ -1,5 +1,4 @@
-{
-    "employees": [
+export const listEmployees = [
         {
             "id": "1",
             "FirstName": "test",
@@ -13,4 +12,3 @@
             "Department": "sales"
         }
     ]
-}

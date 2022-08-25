@@ -4,6 +4,7 @@ import Select from 'react-select';
 import states from '../../Data/states.json';
 import department from '../../Data/department.json';
 // import listEmployees from '../../Data/employees.json';
+import { listEmployees } from '../../Data/employees'
 
 // const data = listEmployees.employees;
 
@@ -31,15 +32,19 @@ import department from '../../Data/department.json';
 // }
 
 // getEmployeesList();
-async function getEmployeesList(employees) {
-    try {
-      const response = await fetch('../../Data/employees.json');
-      return response.json();   
-    } catch (error) {
-      console.log(error.message);
-      return employees;
-    }
-  }
+// async function getEmployeesList(employees) {
+//     try {
+//       const response = await fetch('../../Data/employees.json');
+//       console.log(response.json());
+//     } catch (error) {
+//       console.log(error.message);
+//       return employees;
+//     }
+//   }
+
+
+  // getEmployeesList();
+  // console.log(getEmployeesList());
     
 async function postEmployee(employee, employees) {
     try {
@@ -114,8 +119,8 @@ export default function Form({ employees, setEmployees, setIsOpen }) {
         dateOfBirth: formatDateOfBirth,
         startDate: formatStartDate,
       };
-      await postEmployee(newEmployee, employees);
-      const newList = await getEmployeesList(employees);
+      listEmployees.push(newEmployee, employees);
+      const newList = listEmployees;
       setEmployees(newList);
       setIsOpen(true);
     }

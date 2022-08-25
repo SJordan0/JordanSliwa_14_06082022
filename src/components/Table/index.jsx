@@ -1,5 +1,5 @@
 import DataTable from 'react-data-table-component';
-import listEmployees from '../../Data/employees.json';
+import { listEmployees } from '../../Data/employees';
 
 const columns = [
     {
@@ -45,13 +45,13 @@ const columns = [
     },
 ];
 
-const employees = listEmployees.employees
+const employees = listEmployees
 
 export default function Table() {
     return (
         <DataTable
             columns={columns}
-            data={employees}
+            data={listEmployees}
         />
     );
 };
