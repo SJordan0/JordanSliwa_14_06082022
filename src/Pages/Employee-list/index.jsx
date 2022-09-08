@@ -1,14 +1,29 @@
-import { Link } from "react-router-dom"
-import Table from "../../components/Table"
+import React from "react";
 
-export default function EmployeeList() {
-    return(
-        <main>
-            <div id="employee-div" className="container">
-                <h1>Current Employees</h1>
-                <Table id="employee-table" className="display"></Table>
-                <Link to={`/`}> Home </Link>
-            </div>
-        </main>
-    )
+import { Link } from "react-router-dom";
+import MyTable from "../../components/Table/MyTable";
+import labels from "../../Data/labels"
+
+export default function Employees() {
+  const employees = JSON.parse(localStorage.getItem("employees"));
+
+  function clear(){
+    localStorage.clear();
+    window.location.reload();
+  }
+
+  return (
+    <div className="employees">
+      <div className="table">
+        <MyTable labels={labels} data={employees} />
+      </div>
+      <div className="clear">
+        <button onClick={clear}>Clear</button>
+      </div>
+
+      <div className="employees-link">
+        <Link to="/">Home</Link>
+      </div>
+    </div>
+  );
 }

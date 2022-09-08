@@ -1,288 +1,180 @@
-import React, { useEffect, useState } from 'react';
-import DatePicker from 'react-date-picker';
-import Select from 'react-select';
-import states from '../../Data/states.json';
-import department from '../../Data/department.json';
-// import listEmployees from '../../Data/employees.json';
-import { listEmployees } from '../../Data/employees'
-
-// const data = listEmployees.employees;
-
-// async function getEmployeesList(employees){
-//   const response = data.parse(localStorage.getItem('employees'));
-//   return response.json(employees);
-// }
-
-// async function postEmployee(employees, employee){
-//   const list = listEmployees.parse(localStorage.getItem('employees'));
-//   return employees.push(employee);
-// }
-
-// function getEmployeesList() {
-//     fetch('../../Data/employees.json')
-//     .then((res) => {
-//       return res.json();  
-//   })
-//   .then((employees) => {
-//       console.log(employees);
-//   })
-//   .catch(function(error) {
-//     console.log(error.message);
-//   });
-// }
-
-// getEmployeesList();
-// async function getEmployeesList(employees) {
-//     try {
-//       const response = await fetch('../../Data/employees.json');
-//       console.log(response.json());
-//     } catch (error) {
-//       console.log(error.message);
-//       return employees;
-//     }
-//   }
+import React, { useState } from 'react';
+// import DatePicker from 'react-date-picker';
+import MyDatePicker from './DatePicker/MyDatePicker';
+import States from '../../Data/states';
+import Departments from '../../Data/department';
+import { useDispatch, useSelector } from "react-redux";
+import { add } from "../../Slice/employeeSlice";
+import { Modal } from "sjordan0-p14";
+import Input from './Input';
+import Dropdown from './Dropdown/Dropdowns';
 
 
-  // getEmployeesList();
-  // console.log(getEmployeesList());
-    
-async function postEmployee(employee, employees) {
-    try {
-      const response = await fetch('../../Data/employees.json');
-      return response.json();
-    } catch (error) {
-      console.log(error);
-      return employees.push(employee);
-    }
-  }
+export default function Form() {
 
+  const myTheme = {
+    containerBg: "white",
+    messageBg: "grey",
+    borderColor: "black",
+    buttonBg: "grey",
+    buttonHoverBg: "white",
+    buttonHoverTxt: "black",
+  };
 
-  function formatDates(date) {
-    return date.toISOString().substring(0, 10);
-  }
-  
-  function searchIdMax(data) {
-    let max = 0;
-    Array.from(data).forEach((obj) => {
-      if (obj.id > max) {
-        max = obj.id;
-      }
-    });
-    return max + 1;
-  }
+  const [
+    firstNameToAdd,
+    lastNameToAdd,
+    startDateToAdd,
+    departmentToAdd,
+    birthDateToAdd,
+    streetToAdd,
+    cityToAdd,
+    stateToAdd,
+    zipCodeToAdd,
+  ] = useSelector((state) => [
+    state.firstName,
+    state.lastName,
+    state.startDate,
+    state.department,
+    state.birthDate,
+    state.street,
+    state.city,
+    state.state,
+    state.zipCode,
+  ]);
 
-export default function Form({ employees, setEmployees, setIsOpen }) {
-  const [employee, setEmployee] = useState({
-    id: searchIdMax(employees),
-    firstName: '',
-    lastName: '',
-    dateOfBirth: null,
-    startDate: null,
-    street: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    department: 'Sales',
-  });
+  const [firstName, setFirstName] = useState(firstNameToAdd);
+  const [lastName, setLastName] = useState(lastNameToAdd);
+  const [birthDate, setBirthDate] = useState(birthDateToAdd);
+  const [startDate, setStartDate] = useState(startDateToAdd);
+  const [street, setStreet] = useState(streetToAdd);
+  const [city, setCity] = useState(cityToAdd);
+  const [State, setState] = useState(stateToAdd);
+  const [zipCode, setZipCode] = useState(zipCodeToAdd);
+  const [department, setDepartment] = useState(departmentToAdd);
 
-  useEffect(() => {
-    setEmployee({
-      id: searchIdMax(employees),
-      firstName: '',
-      lastName: '',
-      dateOfBirth: null,
-      startDate: null,
-      street: '',
-      city: '',
-      state: '',
-      zipCode: '',
-      department: 'Sales',
-    });
-  }, [employees]);
+  const [valueBirthDate, setValueBirthDate] = useState(null);
+  const [valueStartDate, setValueStartDate] = useState(null);
 
-  async function validForm() {
-    if (
-      employee.firstName &&
-      employee.lastName &&
-      employee.dateOfBirth &&
-      employee.startDate &&
-      employee.street &&
-      employee.city &&
-      employee.state &&
-      employee.zipCode &&
-      employee.department
-    ) {
-      const formatDateOfBirth = formatDates(employee.dateOfBirth);
-      const formatStartDate = formatDates(employee.startDate);
-      const newEmployee = {
-        ...employee,
-        dateOfBirth: formatDateOfBirth,
-        startDate: formatStartDate,
-      };
-      listEmployees.push(newEmployee, employees);
-      const newList = listEmployees;
-      setEmployees(newList);
-      setIsOpen(true);
-    }
-  }
+  const dispatch = useDispatch();
+
+  const [openModal, setOpenModal] = useState(false);
+  const onOpenModal = () => setOpenModal(true);
+  const onCloseModal = () => setOpenModal(false);
+
+  const dateForTable = (date) => {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getUTCFullYear();
+    return `${day}/${month}/${year}`.toString();
+  };
+
+  const employee = {
+    firstName,
+    lastName,
+    startDate: dateForTable(new Date(startDate)),
+    department,
+    birthDate: dateForTable(new Date(birthDate)),
+    street,
+    city,
+    State,
+    zipCode,
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(add(employee));
+    e.target.reset();
+    setValueBirthDate(null);
+    setValueStartDate(null);
+    onOpenModal();
+  };
+
+  console.log(employee);
+  console.log("BIRTH", birthDate);
+  console.log("START", startDate);
+  console.log("STATE", State);
 
   return (
-    <form id="form" onSubmit={(e) => validForm(e)}>
-      <label htmlFor="firstName">
-        First Name
-      </label>
-      <input
-        type="text"
-        id="firstName"
-        onChange={(e) =>
-          setEmployee({ ...employee, firstName: e.target.value })
-        }
-        required
-        minLength={2}
-        maxLength={20}
-        value={employee.firstName}
-      />
-
-      <label htmlFor="lastName">
-        Last Name
-      </label>
-      <input
-        type="text"
-        id="lastName"
-        onChange={(e) => setEmployee({ ...employee, lastName: e.target.value })}
-        required
-        minLength={2}
-        maxLength={20}
-        value={employee.lastName}
-      />
-
-      <label htmlFor="dateOfBirth">
-        Date of Birth
-      </label>
-      <DatePicker
-        name="dateOfBirth"
-        defaultValue={new Date()}
-        maxDate={
-          new Date(new Date().setFullYear(new Date().getFullYear() - 18))
-        }
-        onChange={(newDate) =>
-          setEmployee({
-            ...employee,
-            dateOfBirth: newDate,
-          })
-        }
-        value={employee.dateOfBirth}
-        required
-      />
-
-      <label htmlFor="startDate">
-        Start Date
-      </label>
-
-      <DatePicker
-        name="startDate"
-        maxDate={new Date()}
-        onChange={(startDateValue) =>
-          setEmployee({
-            ...employee,
-            startDate: startDateValue,
-          })
-        }
-        value={employee.startDate}
-        required
-      />
-
-      <fieldset className="address">
-        <legend>Address</legend>
-
-        <label htmlFor="street">
-          Street
-        </label>
-        <input
+    <>
+      <form onSubmit={handleSubmit}>
+        <Input
           type="text"
-          id="street"
-          onChange={(e) => setEmployee({ ...employee, street: e.target.value })}
-          required
-          minLength={2}
-          maxLength={20}
-          value={employee.street}
+          name="firstname"
+          labelTitle="First Name:"
+          value={firstNameToAdd}
+          setInput={setFirstName}
         />
-
-        <label htmlFor="city">
-          City
-        </label>
-        <input
+        <Input
           type="text"
-          id="city"
-          onChange={(e) => setEmployee({ ...employee, city: e.target.value })}
-          required
-          minLength={2}
-          maxLength={20}
-          value={employee.city}
+          name="lastname"
+          labelTitle="Last Name:"
+          value={lastNameToAdd}
+          setInput={setLastName}
         />
-
-        <label htmlFor="state">
-          State
-        </label>
-
-        <Select
-          name="state"
-          inputId="state"
-          getOptionValue={option => option.abbreviation}
-          getOptionLabel={option => option.name}
-          options={states.states}
-          onChange={(e) => {
-            if (e === null) {
-              setEmployee({ ...employee, state: '' });
-              return;
-            }
-            setEmployee({ ...employee, state: e.name });
-          }}
-          form="form"
-          menuPlacement="auto"
-          isClearable
+        <MyDatePicker
           required
-          value={{ name: employee.state, abbreviation: employee.state }}
+          labelTitle="Birth Date:"
+          selected={valueBirthDate}
+          setValueDate={setValueBirthDate}
+          setDate={setBirthDate}
+          placeholder="Select a birth date"
         />
-
-        <label htmlFor="zipCode">
-          Zip Code
-        </label>
-        <input
-          id="zipCode"
-          name="zipCode"
-          type="number"
-          min={10000}
-          max={99999}
-          onChange={(e) =>
-            setEmployee({ ...employee, zipCode: e.target.value })
-          }
+        <MyDatePicker
           required
-          value={employee.zipCode}
+          labelTitle="Start Date:"
+          selected={valueStartDate}
+          setValueDate={setValueStartDate}
+          setDate={setStartDate}
+          placeholder="Select a start date"
         />
-      </fieldset>
-
-      <label htmlFor="department">
-        Department
-      </label>
-      <Select
-        name="department"
-        inputId="department"
-        options={department.department}
-        defaultValue={department.department[0]}
-        onChange={(e) => {
-          if (e === null) {
-            setEmployee({ ...employee, department: '' });
-            return;
-          }
-          setEmployee({ ...employee, department: e.value });
-        }}
-        form="form"
-        menuPlacement="auto"
-        value={{ label: employee.department, value: employee.department }}
-      />
-
-      <button onClick={validForm}>Save</button>
-    </form>
+        <div className="adress">
+          <Input
+            type="text"
+            name="street"
+            labelTitle="Street:"
+            value={streetToAdd}
+            setInput={setStreet}
+          />
+          <Input
+            type="text"
+            name="city"
+            labelTitle="City:"
+            value={cityToAdd}
+            setInput={setCity}
+          />
+          <Dropdown
+            name="state"
+            labelTitle="State:"
+            value={State}
+            setDrop={setState}
+            datas={States}
+          />
+          <Input
+            type="number"
+            name="zipcode"
+            labelTitle="Zipcode:"
+            value={zipCodeToAdd}
+            setInput={setZipCode}
+          />
+        </div>
+        <Dropdown
+          name="department"
+          labelTitle="Department"
+          value={departmentToAdd}
+          setDrop={setDepartment}
+          datas={Departments}
+        />
+        <Input
+          type="submit"
+          name="submit"
+          className="submit"
+          value="Save"
+        />
+      </form>
+      {openModal && (
+        <Modal theme={myTheme} close={onCloseModal} text="Employee Created!" />
+      )}
+    </>
   );
-}
+};

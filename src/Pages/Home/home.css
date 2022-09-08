@@ -21,4 +21,14 @@ label {
 .address {
     margin-top: 10px;
 }
+
+.inputHidden {
+    height: 1px;
+    border: 0;
+    color: transparent;
+  }
+  
+.inputHidden:focus {
+    outline: 0;
+  }
   
