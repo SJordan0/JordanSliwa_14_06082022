@@ -1,9 +1,6 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import { normalizeText } from "../../utils/utils";
-
-// Search in every entries
 
 export default function Search({
   data,
@@ -39,9 +36,3 @@ export default function Search({
     </div>
   );
 }
-
-Search.propTypes = {
-  data: PropTypes.array.isRequired,
-  handleDisplayedData: PropTypes.func.isRequired,
-  handleIsSearching: PropTypes.func.isRequired,
-};

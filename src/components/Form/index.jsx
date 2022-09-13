@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// import DatePicker from 'react-date-picker';
 import MyDatePicker from './DatePicker/MyDatePicker';
 import States from '../../Data/states';
 import Departments from '../../Data/department';
