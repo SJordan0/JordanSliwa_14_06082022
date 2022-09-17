@@ -9,8 +9,8 @@ export default function Pagination({
   handleClick,
 }) {
   const nbPages = Math.ceil(totalEntries / displayedEntries);
-  const nbPagesArray = new Array(nbPages).fill(0);
-
+  const nbPagesArray = new Array(nbPages).fill(1);
+console.log(nbPagesArray)
   //  previous page
   const handlePreviousPage = () => {
     if (currentPage > 1) handleClick(currentPage - 1);
@@ -32,7 +32,7 @@ export default function Pagination({
       </button>
 
       {/* Create page button */}
-      {nbPagesArray.map((index) => (
+      {nbPagesArray.map((_, index) => (
         <button
           type="button"
           key={generateID()}
