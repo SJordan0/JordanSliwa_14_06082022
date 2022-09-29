@@ -9,7 +9,7 @@ export default function Pagination({
   handleClick,
 }) {
   const nbPages = Math.ceil(totalEntries / displayedEntries);
-  const nbPagesArray = new Array(nbPages).fill(1);
+  const nbPagesArray = new Array(nbPages).fill(0);
 console.log(nbPagesArray)
   //  previous page
   const handlePreviousPage = () => {
